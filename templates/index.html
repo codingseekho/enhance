@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Face Enhancer</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app">
+
+    <header class="header">
+
+        <div class="logo">✨</div>
+
+        <div>
+            <h1>Face Enhancer</h1>
+            <p>AI Photo Enhancer</p>
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <div class="upload-card">
+
+            <div class="upload-icon">
+                📷
+            </div>
+
+            <h2>Upload Photo</h2>
+
+            <p>
+                Enhance your face with AI
+            </p>
+
+            <label class="upload-button">
+
+                Choose Photo
+
+                <input
+                    type="file"
+                    id="imageInput"
+                    accept="image/png,image/jpeg,image/webp"
+                    hidden
+                >
+
+            </label>
+
+            <span class="formats">
+                JPG • PNG • WEBP
+            </span>
+
+        </div>
+
+
+        <div
+            id="previewBox"
+            class="preview-box hidden"
+        >
+
+            <img
+                id="previewImage"
+                src=""
+                alt="Preview"
+            >
+
+        </div>
+
+
+        <button
+            id="enhanceButton"
+            class="enhance-button"
+            disabled
+        >
+
+            ✨ Enhance Photo
+
+        </button>
+
+
+        <div class="model-info">
+
+            <span>AI Model</span>
+
+            <strong>CodeFormer 0.7</strong>
+
+        </div>
+
+
+        <div
+            id="loading"
+            class="loading hidden"
+        >
+
+            <div class="spinner"></div>
+
+            <p>Enhancing your photo...</p>
+
+        </div>
+
+
+        <div
+            id="resultBox"
+            class="result hidden"
+        >
+
+            <h2>✨ Enhanced Photo</h2>
+
+            <img
+                id="resultImage"
+                src=""
+                alt="Enhanced Photo"
+            >
+
+            <a
+                id="saveButton"
+                class="save-button"
+                download="enhanced-photo.png"
+            >
+
+                ⬇ Save Photo
+
+            </a>
+
+            <button
+                id="anotherButton"
+                class="another-button"
+            >
+
+                Enhance Another
+
+            </button>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+const imageInput =
+    document.getElementById("imageInput");
+
+const previewBox =
+    document.getElementById("previewBox");
+
+const previewImage =
+    document.getElementById("previewImage");
+
+const enhanceButton =
+    document.getElementById("enhanceButton");
+
+const loading =
+    document.getElementById("loading");
+
+const resultBox =
+    document.getElementById("resultBox");
+
+const resultImage =
+    document.getElementById("resultImage");
+
+const saveButton =
+    document.getElementById("saveButton");
+
+const anotherButton =
+    document.getElementById("anotherButton");
+
+
+let selectedFile = null;
+
+
+imageInput.addEventListener("change", function () {
+
+    const file = this.files[0];
+
+    if (!file) return;
+
+    selectedFile = file;
+
+    const imageURL =
+        URL.createObjectURL(file);
+
+    previewImage.src = imageURL;
+
+    previewBox.classList.remove("hidden");
+
+    enhanceButton.disabled = false;
+
+    resultBox.classList.add("hidden");
+
+});
+
+
+enhanceButton.addEventListener("click", async function () {
+
+    if (!selectedFile) return;
+
+
+    const formData = new FormData();
+
+    formData.append(
+        "image",
+        selectedFile
+    );
+
+
+    enhanceButton.disabled = true;
+
+    loading.classList.remove("hidden");
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/enhance",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error || "Enhancement failed"
+            );
+
+        }
+
+
+        resultImage.src =
+            data.image;
+
+
+        saveButton.href =
+            data.image;
+
+
+        resultBox.classList.remove(
+            "hidden"
+        );
+
+
+    } catch (error) {
+
+        alert(error.message);
+
+        enhanceButton.disabled = false;
+
+    }
+
+
+    loading.classList.add("hidden");
+
+});
+
+
+anotherButton.addEventListener(
+    "click",
+    function () {
+
+        selectedFile = null;
+
+        imageInput.value = "";
+
+        previewBox.classList.add(
+            "hidden"
+        );
+
+        resultBox.classList.add(
+            "hidden"
+        );
+
+        enhanceButton.disabled = true;
+
+    }
+);
+
+</script>
+
+</body>
+</html>
