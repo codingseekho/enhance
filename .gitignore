@@ -1,0 +1,9 @@
+﻿gfpgan-env/
+node_modules/
+android/
+uploads/
+results/
+www/
+__pycache__/
+*.pyc
+.git/

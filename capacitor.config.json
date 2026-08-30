@@ -1,0 +1,9 @@
+﻿{
+  "appId": "com.festivalgallery.faceenhancer",
+  "appName": "Face Enhancer",
+  "webDir": "www",
+  "server": {
+    "url": "https://fort-eliminate-vocabulary-caroline.trycloudflare.com",
+    "cleartext": false
+  }
+}
