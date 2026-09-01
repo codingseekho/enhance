@@ -1,10 +1,3 @@
-﻿# https://github.com/xinntao/BasicSR
-# flake8: noqa
-from .archs import *
-from .data import *
-from .losses import *
-from .metrics import *
-from .models import *
-from .ops import *
-from .train import *
-from .utils import *
+﻿# BasicSR compatibility fix
+__version__ = "1.4.2"
+__gitsha__ = "unknown"
