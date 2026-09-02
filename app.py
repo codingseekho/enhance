@@ -264,14 +264,19 @@ def enhance():
     # RUN CODEFORMER
     # --------------------------------------------------------
 
+    env = os.environ.copy()
+
+    env["PYTHONPATH"] = (
+        CODEFORMER_DIR
+        + os.pathsep
+        + env.get("PYTHONPATH", "")
+    )
+
     process = subprocess.run(
-
         command,
-
         cwd=CODEFORMER_DIR,
-
+        env=env,
         capture_output=True,
-
         text=True
     )
 
