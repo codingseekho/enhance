@@ -1,4 +1,4 @@
-import os
+﻿import os
 import cv2
 import argparse
 import glob
@@ -11,6 +11,7 @@ from facelib.utils.face_restoration_helper import FaceRestoreHelper
 from facelib.utils.misc import is_gray
 
 from basicsr.utils.registry import ARCH_REGISTRY
+import basicsr.archs.codeformer_arch
 
 pretrain_model_url = {
     'restoration': 'https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth',
